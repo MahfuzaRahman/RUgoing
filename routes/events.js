@@ -36,6 +36,8 @@ let events = [];
             "attendance" : items[i] = 0
         } 
         events.push(event);
+
+        let clubs = [];
     }
 
 })();
