@@ -89,4 +89,11 @@ router.get('/getThemes/:category', function (req, res) {
     res.send(filteredEvents.map(({ eventName }) => ({ eventName })));
   })
 
+// orders events by date
+router.get('/getEventsSorted', function (req, res) {
+    const sortedEvents = events.sort((a, b) => b.date - a.date)
+    //res.send(sortedEvents);
+    res.send(sortedEvents.map(({ eventName }) => ({ eventName })));
+  })
+
 module.exports = router;
