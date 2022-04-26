@@ -7,6 +7,7 @@ const Parser = require("rss-parser");
 
 
 let events = [];
+let clubs = [];
 
 (async function main(){
     const parser = new Parser();
@@ -36,8 +37,27 @@ let events = [];
             "attendance" : items[i] = 0
         } 
         events.push(event);
+        let club = {
+            "clubEmail": clubInfo.substring(0, parIndex),
+            "clubName": clubInfo.substring(parIndex+1, clubInfo.length-1),
+            events: []
+        }
+        if(!clubs.some(c => c.clubName === club.clubName)) {
+            club.events.push(event);
+            clubs.push(club);
+        } else {
+           // let existingClub = 
+            clubs.find(c => c.clubName === club.clubName).events.push(event);
+           // existingClub.events.push(event);
+        }
 
-        let clubs = [];
+        // for(var k = 0; k <clubs.length; k++){
+        //     console.log(k + " " + clubs[k].clubName);
+        //     for(var i = 0; i < clubs[k].events.length; i++){
+        //         console.log(clubs[k].events[i]);
+        //     }
+                
+        // }    
     }
 
 })();
@@ -54,9 +74,9 @@ function getDate(description){
 }
 
 /**
- * searches! find events given club name
+ *  searches! find events given club name
  */
- router.get('/getEvents/:name', function (req, res) {
+router.get('/getEvents/:name', function (req, res) {
     const {name} = req.params;
     const searchedEvents = events.filter((event) => event.clubName.includes(name));
     res.send(searchedEvents);
