@@ -12,7 +12,7 @@ const csvWriter = createCsvWriter({
       {id: 'clubEmail', title: 'Club Email'},
       {id: 'clubName', title: 'Club Name'},
       {id: 'categories', title: 'Categories'},
-      //{id: 'content', title: 'Content'},
+      {id: 'description', title: 'Event Description'},
       //{id: 'contentSnippet', title: 'Content Snippet'},
       {id: 'dateStart', title: 'Begins'},
       {id: 'dateEnd', title: 'Ends'},
@@ -76,7 +76,7 @@ function createEvent(item){
         clubEmail: clubInfo.substring(0, parIndex),
         clubName: clubInfo.substring(parIndex+1, clubInfo.length-1),
         categories: item.categories,
-        //content: item.content, // looks bad rn bc of all the <divs> :/
+        description: getDescription(item.content), // looks bad rn bc of all the <divs> :/
         //contentSnippet: item.contentSnippet,
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
@@ -138,6 +138,13 @@ function getDate(description){
         start: fields[fields.length - 3], 
         end: fields[fields.length-2]
     };
+}
+
+function getDescription(description){
+    var startIndex = description.indexOf('<p>')+3;
+    var endIndex = description.indexOf('</p>');
+    let fields = description.substring(startIndex, endIndex);
+    return fields;
 }
 
 /**
