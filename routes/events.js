@@ -76,7 +76,7 @@ function createEvent(item){
         clubEmail: clubInfo.substring(0, parIndex),
         clubName: clubInfo.substring(parIndex+1, clubInfo.length-1),
         categories: item.categories,
-        description: getDescription(item.contentSnippet), // looks bad rn bc of all the <divs> :/
+        description: getDescription(item.content), // looks bad rn bc of all the <divs> :/
         //contentSnippet: item.contentSnippet,
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
@@ -141,11 +141,11 @@ function getDate(description){
 }
 
 function getDescription(description){
-    // var startIndex = description.indexOf('>', description.indexOf('<p'))+1;
-    // var endIndex = description.indexOf('<', startIndex);
+    var startIndex = description.indexOf('<p>')+3;
+    var endIndex = description.indexOf('</p>');
     // let fields = description.substring(startIndex, endIndex);
-    var startIndex = description.indexOf('\n\r\n  \n')+6;
-    var endIndex = description.indexOf('\n', startIndex);
+    //var startIndex = description.indexOf('\n\r\n  \n')+6;
+   // var endIndex = description.indexOf('\n', startIndex);
     let fields = description.substring(startIndex, endIndex);
     return fields;
 }
