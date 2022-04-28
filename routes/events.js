@@ -5,7 +5,7 @@ const { create } = require('domain');
 const fs = require("fs");
 const Parser = require("rss-parser");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const csvWriter = createCsvWriter({
+const csvWriterEvents = createCsvWriter({
     path: 'eventData.csv',
     header: [
       {id: 'eventName', title: 'Event Name'},
@@ -20,6 +20,15 @@ const csvWriter = createCsvWriter({
       {id: 'attendance', title: 'Attendance'}
     ]
 });
+
+const csvWriterClubs = createCsvWriter({
+    path: 'clubData.csv',
+    header: [
+        {id: 'clubName', title: 'Club Name'},
+        {id: 'clubEmail', title: 'Club Email'},
+        {id: 'events', title: 'Events'}
+    ]
+})
 
 let events = [];
 let clubs = [];
@@ -50,7 +59,8 @@ let clubs = [];
     }
     
     // writes all events to eventsData.csv
-    csvWriter.writeRecords(events);
+    csvWriterEvents.writeRecords(events);
+    csvWriterClubs.writeRecords(clubs);
     
     /* PRINTS ALL CLUBS AND THEIR EVENTS */
     // for(var k = 0; k <clubs.length; k++){
@@ -140,6 +150,11 @@ function getDate(description){
     };
 }
 
+/**
+ * Parses through content snippet to find the event description
+ * @param {} description 
+ * @returns 
+ */
 function getDescription(description){
     var startIndex = description.indexOf('<p>')+3;
     var endIndex = description.indexOf('</p>');
