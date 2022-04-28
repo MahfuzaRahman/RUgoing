@@ -14,7 +14,8 @@ const csvWriter = createCsvWriter({
       {id: 'categories', title: 'Categories'},
       //{id: 'content', title: 'Content'},
       //{id: 'contentSnippet', title: 'Content Snippet'},
-      {id: 'date', title: 'Date'},
+      {id: 'dateStart', title: 'Begins'},
+      {id: 'dateEnd', title: 'Ends'},
       {id: 'RSVP', title: 'RSVP'},
       {id: 'attendance', title: 'Attendance'}
     ]
@@ -77,7 +78,8 @@ function createEvent(item){
         categories: item.categories,
         //content: item.content, // looks bad rn bc of all the <divs> :/
         //contentSnippet: item.contentSnippet,
-        date: getDate(item.contentSnippet),
+        dateStart: getDate(item.contentSnippet).start,
+        dateEnd: getDate(item.contentSnippet).end,
         RSVP: item.guid,
         attendance: 0
     } 
@@ -132,7 +134,10 @@ function addClub(club, event){
  */
 function getDate(description){
     let fields = description.split('\r\n');
-    return fields[fields.length - 3];
+    return {
+        start: fields[fields.length - 3], 
+        end: fields[fields.length-2]
+    };
 }
 
 /**
