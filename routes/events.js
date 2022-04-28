@@ -4,7 +4,21 @@ var router = express.Router();
 const { create } = require('domain');
 const fs = require("fs");
 const Parser = require("rss-parser");
-
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const csvWriter = createCsvWriter({
+    path: 'eventData.csv',
+    header: [
+      {id: 'eventName', title: 'Event Name'},
+      {id: 'clubEmail', title: 'Club Email'},
+      {id: 'clubName', title: 'Club Name'},
+      {id: 'categories', title: 'Categories'},
+      //{id: 'content', title: 'Content'},
+      //{id: 'contentSnippet', title: 'Content Snippet'},
+      {id: 'date', title: 'Date'},
+      {id: 'RSVP', title: 'RSVP'},
+      {id: 'attendance', title: 'Attendance'}
+    ]
+});
 
 let events = [];
 let clubs = [];
@@ -34,16 +48,17 @@ let clubs = [];
         addClub(club, event);
     }
     
-    //let numEvents = 0;
-    for(var k = 0; k <clubs.length; k++){
-        console.log(k + " " + clubs[k].clubName);
-        for(var i = 0; i < clubs[k].events.length; i++){
-            console.log(clubs[k].events[i].eventName);
-           // numEvents++;
-        }
-    }    
-    // console.log(numEvents + " " + events.length);
-
+    // writes all events to eventsData.csv
+    csvWriter.writeRecords(events);
+    
+    /* PRINTS ALL CLUBS AND THEIR EVENTS */
+    // for(var k = 0; k <clubs.length; k++){
+    //     console.log(k + " " + clubs[k].clubName);
+    //     for(var i = 0; i < clubs[k].events.length; i++){
+    //         console.log(clubs[k].events[i].eventName);
+    //     }
+    // }    
+   
 })();
 
 /**
@@ -56,15 +71,15 @@ function createEvent(item){
     let clubInfo = (String)(item.author);
     let parIndex = clubInfo.indexOf('(');
     let event = {
-        "eventName": item.title,
-        "clubEmail": clubInfo.substring(0, parIndex),
-        "clubName": clubInfo.substring(parIndex+1, clubInfo.length-1),
-        "categories": item.categories,
-        "content": item.content,
-        "contentSnippet": item.contentSnippet,
-        "date": getDate(item.contentSnippet),
-        "RSVP": item.guid,
-        "attendance" : 0
+        eventName: item.title,
+        clubEmail: clubInfo.substring(0, parIndex),
+        clubName: clubInfo.substring(parIndex+1, clubInfo.length-1),
+        categories: item.categories,
+        //content: item.content, // looks bad rn bc of all the <divs> :/
+        //contentSnippet: item.contentSnippet,
+        date: getDate(item.contentSnippet),
+        RSVP: item.guid,
+        attendance: 0
     } 
     return event;
 }
