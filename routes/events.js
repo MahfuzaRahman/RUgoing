@@ -145,7 +145,7 @@ function getDescription(description){
     // var endIndex = description.indexOf('<', startIndex);
     // let fields = description.substring(startIndex, endIndex);
     var startIndex = description.indexOf('\n\r\n  \n')+6;
-    var endIndex = description.indexOf('\n\r', startIndex);
+    var endIndex = description.indexOf('\n', startIndex);
     let fields = description.substring(startIndex, endIndex);
     return fields;
 }
