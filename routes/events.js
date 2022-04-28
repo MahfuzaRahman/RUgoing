@@ -31,17 +31,7 @@ let clubs = [];
          */
         let clubInfo = (String)(items[i].author);
         let parIndex = clubInfo.indexOf('(');
-        let event = {
-            "eventName": items[i].title,
-            "clubEmail": clubInfo.substring(0, parIndex),
-            "clubName": clubInfo.substring(parIndex+1, clubInfo.length-1),
-            "categories": items[i].categories,
-            "content": items[i].content,
-            "contentSnippet": items[i].contentSnippet,
-            "date": getDate(items[i].contentSnippet),
-            "RSVP": items[i].guid,
-            "attendance" : 0
-        } 
+        let event = createEvent(items[i])
         events.push(event);
         
         /**
@@ -63,6 +53,7 @@ let clubs = [];
     /**
      * Loops through clubs[] and prints the name of the club and their events
      */
+    //let numEvents = 0;
     for(var k = 0; k <clubs.length; k++){
         console.log(k + " " + clubs[k].clubName);
         for(var i = 0; i < clubs[k].events.length; i++){
@@ -70,14 +61,42 @@ let clubs = [];
             numEvents++;
         }
     }    
+   // console.log(numEvents + " " + events.length);
 
 })();
+
+/**
+ * Creates event by adding information parsed 
+ * from RSS feed
+ * @param {*} item array element of array of events on RSS feed
+ * @returns event
+ */
+function createEvent(item){
+    let clubInfo = (String)(item.author);
+    let parIndex = clubInfo.indexOf('(');
+    let event = {
+        "eventName": item.title,
+        "clubEmail": clubInfo.substring(0, parIndex),
+        "clubName": clubInfo.substring(parIndex+1, clubInfo.length-1),
+        "categories": item.categories,
+        "content": item.content,
+        "contentSnippet": item.contentSnippet,
+        "date": getDate(item.contentSnippet),
+        "RSVP": item.guid,
+        "attendance" : 0
+    } 
+    return event;
+}
+
+
+function createClub()
+
 
 /**
  * Gets user listings
  */
 router.get('/getEvents', function(req, res, next) {
-       res.send(events);
+    res.send(events);
 });
 
 /**
