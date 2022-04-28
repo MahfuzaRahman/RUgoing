@@ -142,7 +142,7 @@ function getDate(description){
 
 function getDescription(description){
     var startIndex = description.indexOf('<p>')+3;
-    var endIndex = description.indexOf('<');
+    var endIndex = description.indexOf('<', startIndex);
     let fields = description.substring(startIndex, endIndex);
     return fields;
 }
