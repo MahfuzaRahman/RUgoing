@@ -17,6 +17,7 @@ const csvWriterEvents = createCsvWriter({
       {id: 'dateStart', title: 'Begins'},
       {id: 'dateEnd', title: 'Ends'},
       {id: 'location', title: 'Location'},
+      {id: 'image', title: 'Image'},
       {id: 'RSVP', title: 'RSVP'},
       {id: 'attendance', title: 'Attendance'}
     ]
@@ -61,7 +62,8 @@ let clubs = [];
     
     // writes all events to eventsData.csv
     csvWriterEvents.writeRecords(events);
-    csvWriterClubs.writeRecords(clubs);
+    //csvWriterClubs.writeRecords(clubs);
+    writeClubsCSV(clubs);
     
     /* PRINTS ALL CLUBS AND THEIR EVENTS */
     // for(var k = 0; k <clubs.length; k++){
@@ -70,8 +72,38 @@ let clubs = [];
     //         console.log(clubs[k].events[i].eventName);
     //     }
     // }    
-   
 })();
+
+function writeClubsCSV(clubs)
+{
+    let maxNumberOfEvents = 0;
+    for(let x = 0; x < clubs.length; x++)   //number of event ids to create
+    {
+        if(clubs[x].events.length > maxNumberOfEvents)
+        {
+            maxNumberOfEvents = clubs[x].events.length; 
+        }
+    }
+
+    let csv = "Club Name,Club Email"; //writes the header
+    for(let x = 1; x<=maxNumberOfEvents; x++)
+    {
+        csv+= (",Event " + x);
+    }
+
+    for(let x = 0; x < clubs.length; x++)
+    {
+        csv+= ("\n" + clubs[x].clubName + "," + clubs[x].clubEmail);
+        for(let i = 0; i < clubs[x].events.length; i++)
+        {
+            csv += ("," + (clubs[x].events[i].eventName));
+        }
+    }
+    
+    fs.writeFileSync("clubData.csv", csv);
+
+}
+
 
 /**
  * Creates event by adding information parsed 
@@ -92,6 +124,7 @@ function createEvent(item){
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
         location: getLocation(item.contentSnippet),
+        image: item.url,
         RSVP: item.guid,
         attendance: 0
     } 
