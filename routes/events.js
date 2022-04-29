@@ -123,7 +123,7 @@ function createEvent(item){
         //contentSnippet: item.contentSnippet,
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
-        location: getLocation(item.contentSnippet),
+        location: getLocation(item.content),
         image: item.url,
         RSVP: item.guid,
         attendance: 0
@@ -202,11 +202,11 @@ function getDescription(description){
 
 
 function getLocation(description){
-    var startIndex = description.indexOf('p-location location\">');
+    var startIndex = description.indexOf('<span class=\"p-location location\">');
     if(startIndex===-1)
         return " ";
     var endIndex = description.indexOf('</span>');
-    return description.substring(startIndex+21, endIndex);
+    return description.substring(startIndex+34, endIndex);
 }
 
 /**
