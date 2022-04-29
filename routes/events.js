@@ -16,6 +16,7 @@ const csvWriterEvents = createCsvWriter({
       //{id: 'contentSnippet', title: 'Content Snippet'},
       {id: 'dateStart', title: 'Begins'},
       {id: 'dateEnd', title: 'Ends'},
+      {id: 'location', title: 'Location'},
       {id: 'RSVP', title: 'RSVP'},
       {id: 'attendance', title: 'Attendance'}
     ]
@@ -90,6 +91,7 @@ function createEvent(item){
         //contentSnippet: item.contentSnippet,
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
+        location: getLocation(item.contentSnippet),
         RSVP: item.guid,
         attendance: 0
     } 
@@ -163,6 +165,15 @@ function getDescription(description){
    // var endIndex = description.indexOf('\n', startIndex);
     let fields = description.substring(startIndex, endIndex);
     return fields;
+}
+
+
+function getLocation(description){
+    var startIndex = description.indexOf('p-location location\">');
+    if(startIndex===-1)
+        return " ";
+    var endIndex = description.indexOf('</span>');
+    return description.substring(startIndex+21, endIndex);
 }
 
 /**
