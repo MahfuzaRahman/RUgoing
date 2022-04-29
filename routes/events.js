@@ -124,7 +124,7 @@ function createEvent(item){
         dateStart: getDate(item.contentSnippet).start,
         dateEnd: getDate(item.contentSnippet).end,
         location: getLocation(item.content),
-        image: item.url,
+        image: ((item.enclosure) === undefined) ? "" : (item.enclosure)['url'],
         RSVP: item.guid,
         attendance: 0
     } 
@@ -175,7 +175,7 @@ function addClub(club, event){
 /**
  * Parses through description to find the date of the event
  * @param {*} description RSS feeds provide a description for each event which contains the date of the event
- * @returns 
+ * @returns date of event
  */
 function getDate(description){
     let fields = description.split('\r\n');
@@ -187,8 +187,8 @@ function getDate(description){
 
 /**
  * Parses through content snippet to find the event description
- * @param {} description 
- * @returns 
+ * @param {} description RSS feeds provide a content for each event which contains the description of the event
+ * @returns description of event
  */
 function getDescription(description){
     var startIndex = description.indexOf('<p>')+3;
@@ -200,7 +200,11 @@ function getDescription(description){
     return fields;
 }
 
-
+/**
+ * Parses through content snippet to find the event's location
+ * @param {*} description RSS feeds provide a description for each event which contains the location of the event
+ * @returns 
+ */
 function getLocation(description){
     var startIndex = description.indexOf('<span class=\"p-location location\">');
     if(startIndex===-1)
